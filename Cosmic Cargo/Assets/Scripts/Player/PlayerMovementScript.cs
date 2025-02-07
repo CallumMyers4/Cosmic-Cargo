@@ -8,7 +8,7 @@ public class PlayerMovementScript : MonoBehaviour
     private float moveSpeed = 8.0f;   //players move speed
     private Rigidbody2D rb;  //rigidbody ref
     public Camera playerCam, stationCam;  //reference to player's cam and station's cam
-    public GameObject exhaust;  //sprite for dashing
+    public GameObject exhaust, bullet;  //sprite for dashing, bullet prefab
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
@@ -49,6 +49,12 @@ public class PlayerMovementScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastDashTime + dashCooldown)
         {
             StartDash();
+        }
+
+        //fire bullets if LMB pressed
+        if (Input.GetMouseButtonDown(0))
+        {
+            Fire();
         }
     }
 
@@ -99,5 +105,18 @@ public class PlayerMovementScript : MonoBehaviour
             exhaust.SetActive(false);
             rb.velocity = Vector2.zero; //end dash
         }
+    }
+
+    //create a bullet
+    void Fire()
+    {
+        //get the player's forward direction (facing the mouse)
+        Vector2 fireDirection = transform.up; 
+
+        //calculate bullet spawn position slightly in front of the player
+        Vector3 bulletSpawn = transform.position + (Vector3)fireDirection * 2.3f; // Adjust the multiplier if needed
+
+        //create
+        Instantiate(bullet, bulletSpawn, transform.rotation);
     }
 }
