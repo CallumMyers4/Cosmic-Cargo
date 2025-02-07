@@ -8,6 +8,7 @@ public class PlayerMovementScript : MonoBehaviour
     private float moveSpeed = 8.0f;   //players move speed
     private Rigidbody2D rb;  //rigidbody ref
     public Camera playerCam, stationCam;  //reference to player's cam and station's cam
+    public GameObject exhaust;  //sprite for dashing
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
@@ -78,6 +79,7 @@ public class PlayerMovementScript : MonoBehaviour
     //begin dashing
     void StartDash()
     {
+        exhaust.SetActive(true);
         isDashing = true;
         dashTimeLeft = dashTime;
         lastDashTime = Time.time;
@@ -94,7 +96,8 @@ public class PlayerMovementScript : MonoBehaviour
         else
         {
             isDashing = false;
-            rb.velocity = Vector2.zero; // Stop dash
+            exhaust.SetActive(false);
+            rb.velocity = Vector2.zero; //end dash
         }
     }
 }
