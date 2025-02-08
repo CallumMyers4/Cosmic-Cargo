@@ -119,4 +119,13 @@ public class PlayerMovementScript : MonoBehaviour
         //create
         Instantiate(bullet, bulletSpawn, transform.rotation);
     }
+
+    //return time since dash as a %
+    public float GetDashCooldown()
+{
+    float timeSinceLastDash = Time.time - lastDashTime;
+    return Mathf.Clamp01(timeSinceLastDash / dashCooldown); // Normalized value (0 to 1)
+}
+
+
 }
