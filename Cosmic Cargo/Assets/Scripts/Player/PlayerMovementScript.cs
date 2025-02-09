@@ -10,12 +10,13 @@ public class PlayerMovementScript : MonoBehaviour
     public Camera playerCam, stationCam;  //reference to player's cam and station's cam
     public GameObject exhaust, bullet;  //sprite for dashing, bullet prefab
     public int partsCollected = 0;
+    public float health = 100.0f;
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
 
     // Fire rate control
-    [SerializeField] private float fireRate = 0.02f; // Time between shots
+    private float fireRate = 0.2f; // Time between shots
     private float nextFireTime = 0f; // Time when player can fire next
     
     //check if currently dashing, how long dash should last, how long is left before timer runs out, when dash was last used and
@@ -137,6 +138,13 @@ public class PlayerMovementScript : MonoBehaviour
     {
         int maxParts = 10; //parts per stage
         return (float)partsCollected / maxParts; //return as %
+    }
+
+    //return health
+    public float GetCurrentHealth()
+    {
+        float maxHealth = 100; //parts per stage
+        return health / maxHealth; //return as %
     }
 
     //add when finding parts

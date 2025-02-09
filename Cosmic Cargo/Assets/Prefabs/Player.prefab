@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 942633183774109909}
   m_Layer: 0
   m_Name: Player Object
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -378,6 +378,7 @@ MonoBehaviour:
   exhaust: {fileID: 5303170923706889798}
   bullet: {fileID: 1048490078580544380, guid: 3d9bfed0ce6cc114887ac1351195f986, type: 3}
   partsCollected: 0
+  health: 40
 --- !u!1 &5939811452886935744
 GameObject:
   m_ObjectHideFlags: 0

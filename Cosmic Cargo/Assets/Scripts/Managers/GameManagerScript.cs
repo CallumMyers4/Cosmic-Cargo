@@ -59,6 +59,14 @@ public class GameManagerScript : MonoBehaviour
             partsBar.fillAmount = player.GetPartsCollected();
         }
 
+        if (player != null && healthBar != null)
+        {
+            healthBar.fillAmount = player.GetCurrentHealth();
+            Debug.Log(player.GetCurrentHealth());
+            Debug.Log(healthBar.fillAmount);
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (HUDPanel.activeSelf)
