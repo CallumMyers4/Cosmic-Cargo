@@ -14,29 +14,38 @@ public class PlayerAttackerScript : MonoBehaviour
     private float attackRange = 15f; // Distance to ship before firing
     private float fireRate = 2.5f; // Wait time between shots
     private float nextFireTime = 0f; // When to fire next
+    
+    private GameObject gameManager;
+    private GameManagerScript gameManagerScript;
 
     void Start()
     {  
         player = GameObject.FindWithTag("Player"); // Find Player by tag
+
+        gameManager = GameObject.FindWithTag("GameController"); // Find Player by tag
+        gameManagerScript = gameManager.GetComponent<GameManagerScript>();
     }
     void Update()
     {
-        if (player == null) return;
-
-        RotateTowardsPlayer(); // Always face the ship
-
-        // If within attack range, fire bullets
-        if (Vector2.Distance(transform.position, player.transform.position) <= attackRange)
+        if (gameManagerScript.playing)
         {
-            if (Time.time >= nextFireTime)
-            {
-                Fire();
-                nextFireTime = Time.time + fireRate; // Set next fire time
-            }
-        }
+            if (player == null) return;
 
-        // Move towards ship
-        MoveTowardsPlayer();
+            RotateTowardsPlayer(); // Always face the ship
+
+            // If within attack range, fire bullets
+            if (Vector2.Distance(transform.position, player.transform.position) <= attackRange)
+            {
+                if (Time.time >= nextFireTime)
+                {
+                    Fire();
+                    nextFireTime = Time.time + fireRate; // Set next fire time
+                }
+            }
+
+            // Move towards ship
+            MoveTowardsPlayer();
+        }
     }
 
     void MoveTowardsPlayer()

@@ -20,8 +20,13 @@ public class GameManagerScript : MonoBehaviour
     public UnityEngine.UI.Image healthBar, enemyBar, dashBar, partsBar; //ref to healthbar, bar displaying enemies in danger zone, dash cooldown bar and parts found
     [SerializeField]
     private GameObject HUDPanel, pausePanel; //ref to main HUD and pause menu
+    [SerializeField]
+    private GameObject loss1Panel, loss2Panel, winPanel;    //ref to lost by enemies, lost by lives and won panels
+    public ZoneManagerScript zoneManager;
     public int stage = 1;
-    private bool spawningEnemies = true; //enemy spawning
+    public bool spawningEnemies = true, playing = true; //enemy spawning, game active
+    public SpriteRenderer stationShip;  //refernce to ship on station
+    public Sprite newShip;  //reference to stage 2 ship sprite
 
     // Start is called before the first frame update
     void Start()
@@ -49,21 +54,60 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player != null && dashBar != null)
+        if (playing)
         {
-            dashBar.fillAmount = player.GetDashCooldown();
-        }
+            if (player != null && dashBar != null)
+            {
+                dashBar.fillAmount = player.GetDashCooldown();
+            }
 
-        if (player != null && partsBar != null)
-        {
-            partsBar.fillAmount = player.GetPartsCollected();
-        }
+            if (player != null && partsBar != null)
+            {
+                partsBar.fillAmount = player.GetPartsCollected();
+            }
 
-        if (player != null && healthBar != null)
-        {
-            healthBar.fillAmount = player.GetCurrentHealth();
-            Debug.Log(player.GetCurrentHealth());
-            Debug.Log(healthBar.fillAmount);
+            if (player != null && healthBar != null)
+            {
+                healthBar.fillAmount = player.GetCurrentHealth();
+            }
+
+            if (player != null && enemyBar != null)
+            {
+                enemyBar.fillAmount = zoneManager.GetShipsInZonePercent();
+            }
+
+            if (player.partsCollected == 10 && stage == 1)
+            {
+                //spawn next round collectables
+                for (int i = 0; i < partsPerRound; i++)
+                {
+                    float randomX = Random.Range(minX, maxX);
+                    float randomY = Random.Range(minY, maxY);
+                    Vector2 collectableSpawn = new Vector2(randomX, randomY);
+                    Instantiate(partsPrefab, collectableSpawn, Quaternion.identity);
+
+                    player.partsCollected = 0;
+                    spawnInterval = 2.5f;
+                }
+                stationShip.sprite = newShip;
+                stage = 2;
+            }
+            else if (player.partsCollected == 10 && stage == 2)
+            {
+                Win();
+            }
+
+            if (zoneManager.GetShipsInZone() >= 10)
+            {
+                spawningEnemies = false;
+                LoseControl();
+            }
+
+            if (player.health <= 0)
+            {
+                spawningEnemies = false;
+                LoseLife();
+            }
         }
 
 
@@ -78,25 +122,6 @@ public class GameManagerScript : MonoBehaviour
                 ClosePause();
             }
         }
-
-        if (player.partsCollected == 10 && stage == 1)
-        {
-            //spawn next round collectables
-            for (int i = 0; i < partsPerRound; i++)
-            {
-                float randomX = Random.Range(minX, maxX);
-                float randomY = Random.Range(minY, maxY);
-                Vector2 collectableSpawn = new Vector2(randomX, randomY);
-                Instantiate(partsPrefab, collectableSpawn, Quaternion.identity);
-
-                player.partsCollected = 0;
-                spawnInterval = 2.5f;
-            }
-
-            stage = 2;
-        }
-        else if (player.partsCollected == 10 && stage == 2)
-            Win();
     }
 
     //opens pause, closes HUD
@@ -116,11 +141,6 @@ public class GameManagerScript : MonoBehaviour
     public void LoadMenu()
     {
         SceneManager.LoadScene("MainMenuScene");
-    }
-
-    public void Win()
-    {
-        Debug.Log("Won!");
     }
 
     //spawn enemies
@@ -149,5 +169,26 @@ public class GameManagerScript : MonoBehaviour
 
             Instantiate(enemyPrefab, enemySpawn, Quaternion.identity);
         }
+    }
+
+    public void Win()
+    {
+        winPanel.SetActive(true);
+        HUDPanel.SetActive(false);
+        Debug.Log("Won!");
+    }
+
+    private void LoseLife()
+    {
+        loss2Panel.SetActive(true);
+        HUDPanel.SetActive(false);
+        Debug.Log("Lose");
+    }
+
+    private void LoseControl()
+    {
+        loss1Panel.SetActive(true);
+        HUDPanel.SetActive(false);
+        Debug.Log("Too many enemies");
     }
 }

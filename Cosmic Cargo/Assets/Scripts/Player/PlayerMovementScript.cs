@@ -11,6 +11,7 @@ public class PlayerMovementScript : MonoBehaviour
     public GameObject exhaust, bullet;  //sprite for dashing, bullet prefab
     public int partsCollected = 0;
     public float health = 100.0f;
+    public GameManagerScript gameManager;
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
@@ -31,36 +32,39 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        //get input
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-        
-        //get mouse pos (in world)
-        mousePos = playerCam.ScreenToWorldPoint(Input.mousePosition);
+        if (gameManager.playing)
+        {
+            //get input
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+            
+            //get mouse pos (in world)
+            mousePos = playerCam.ScreenToWorldPoint(Input.mousePosition);
 
-        //switch between cams when holding tab
-        if (Input.GetKey(KeyCode.Tab))
-        {
-            playerCam.enabled = false;
-            stationCam.enabled = true;
-        }
-        else
-        {
-            stationCam.enabled = false;
-            playerCam.enabled = true;
-        }
+            //switch between cams when holding tab
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                playerCam.enabled = false;
+                stationCam.enabled = true;
+            }
+            else
+            {
+                stationCam.enabled = false;
+                playerCam.enabled = true;
+            }
 
-        //check if player can/wants to dash
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastDashTime + dashCooldown)
-        {
-            StartDash();
-        }
+            //check if player can/wants to dash
+            if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastDashTime + dashCooldown)
+            {
+                StartDash();
+            }
 
-        //fire bullets if past cooldown
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
-        {
-            Fire();
-            nextFireTime = Time.time + fireRate; // Set next allowed fire time
+            //fire bullets if past cooldown
+            if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+            {
+                Fire();
+                nextFireTime = Time.time + fireRate; // Set next allowed fire time
+            }
         }
     }
 

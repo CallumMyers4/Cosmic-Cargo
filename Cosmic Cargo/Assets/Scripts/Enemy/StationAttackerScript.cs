@@ -16,26 +16,37 @@ public class StationAttackerScript : MonoBehaviour
     private float attackRange = 15f; // Distance to ship before firing
     private float fireRate = 1.5f; // Wait time between shots
     private float nextFireTime = 0f; // When to fire next
+    private GameObject gameManager;
+    private GameManagerScript gameManagerScript;
+
+    void Start()
+    {
+        gameManager = GameObject.FindWithTag("GameController"); // Find Player by tag
+        gameManagerScript = gameManager.GetComponent<GameManagerScript>();
+    }
 
     void Update()
     {
-        if (ship == null) return;
-
-        RotateTowardsShip(); // Always face the ship
-
-        // If within attack range, fire bullets
-        if (Vector2.Distance(transform.position, ship.transform.position) <= attackRange)
+        if (gameManagerScript.playing)
         {
-            if (Time.time >= nextFireTime)
+            if (ship == null) return;
+
+            RotateTowardsShip(); // Always face the ship
+
+            // If within attack range, fire bullets
+            if (Vector2.Distance(transform.position, ship.transform.position) <= attackRange)
             {
-                Fire();
-                nextFireTime = Time.time + fireRate; // Set next fire time
+                if (Time.time >= nextFireTime)
+                {
+                    Fire();
+                    nextFireTime = Time.time + fireRate; // Set next fire time
+                }
             }
-        }
-        else
-        {
-            // Move towards ship
-            MoveTowardsShip();
+            else
+            {
+                // Move towards ship
+                MoveTowardsShip();
+            }
         }
     }
 
