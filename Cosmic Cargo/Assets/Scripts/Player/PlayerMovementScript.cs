@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    private float moveSpeed = 8.0f;   //players move speed
+    private float moveSpeed = 12.0f;   //players move speed
     private Rigidbody2D rb;  //rigidbody ref
     public Camera playerCam, stationCam;  //reference to player's cam and station's cam
     public GameObject exhaust, bullet;  //sprite for dashing, bullet prefab
@@ -15,7 +15,7 @@ public class PlayerMovementScript : MonoBehaviour
     
     //check if currently dashing, how long dash should last, how long is left before timer runs out, when dash was last used and
     //how quick to move whilst dashing and how long between allowing dash
-    private bool isDashing; private float dashTime = 5.0f, dashTimeLeft = 0.0f, lastDashTime = 0.0f, dashSpeed = 12.0f, dashCooldown = 10.0f;
+    private bool isDashing; private float dashTime = 5.0f, dashTimeLeft = 0.0f, lastDashTime = 0.0f, dashSpeed = 20.0f, dashCooldown = 10.0f;
 
 
     void Start()

@@ -9,8 +9,10 @@ using UnityEngine.UI;
 public class GameManagerScript : MonoBehaviour
 {
     private int partsPerRound = 10; //number of parts to spawn
-    public float maxX, maxY, minX, minY;    //boundaries of game world
-    public GameObject partsPrefab, enemyPrefab; //prefabs for the collectables and enemy
+    public GameObject leftBorder, rightBorder, bottomBorder, topBorder;    //borders of game world
+    private float minX, maxX, minY, maxY;   //boundaries of spawning
+    public GameObject partsPrefab, shipAttackerPrefab, playerAttackerPrefab; //prefabs for the collectables and enemies
+    private float spawnInterval = 2f; // time in seconds between enemy spawns
     [SerializeField]
     private PlayerMovementScript player;  //player ref
     [SerializeField]
@@ -19,11 +21,21 @@ public class GameManagerScript : MonoBehaviour
     private GameObject HUDPanel, pausePanel; //ref to main HUD and pause menu
     // Start is called before the first frame update
     void Start()
-    {
-        //spawn in objects on game start
+    {       
+        //set borders
+        minX = leftBorder.transform.position.x + 5;
+        maxX = rightBorder.transform.position.x - 5;
+        minY = bottomBorder.transform.position.y + 10;
+        maxY = topBorder.transform.position.y - 10;
+
+        //spawn collectables
         for (int i = 0; i < partsPerRound; i++)
         {
-            //instantiate between boundaries, avoid space station and player
+            float randomX = Random.Range(minX, maxX);
+            float randomY = Random.Range(minY, maxY);
+            Vector2 collectableSpawn = new Vector2(randomX, randomY);
+
+            Instantiate(partsPrefab, collectableSpawn, Quaternion.identity);
         }
     }
 
