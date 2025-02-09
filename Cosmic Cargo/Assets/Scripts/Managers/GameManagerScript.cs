@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.SceneManagement;
@@ -17,7 +15,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField]
     private PlayerMovementScript player;  //player ref
     [SerializeField]
-    public UnityEngine.UI.Image healthBar, enemyBar, dashBar, partsBar; //ref to healthbar, bar displaying enemies in danger zone, dash cooldown bar and parts found
+    public Image healthBar, enemyBar, dashBar, partsBar; //ref to healthbar, bar displaying enemies in danger zone, dash cooldown bar and parts found
     [SerializeField]
     private GameObject HUDPanel, pausePanel; //ref to main HUD and pause menu
     [SerializeField]
