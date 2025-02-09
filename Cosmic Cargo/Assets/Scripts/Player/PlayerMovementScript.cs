@@ -19,6 +19,9 @@ public class PlayerMovementScript : MonoBehaviour
     // Fire rate control
     private float fireRate = 0.2f; // Time between shots
     private float nextFireTime = 0f; // Time when player can fire next
+
+    public AudioClip shootAudio, pickupAudio;   //audio for when shooting or collecting a part
+    public AudioSource audioSource; //ref to player's audio player
     
     //check if currently dashing, how long dash should last, how long is left before timer runs out, when dash was last used and
     //how quick to move whilst dashing and how long between allowing dash
@@ -128,6 +131,9 @@ public class PlayerMovementScript : MonoBehaviour
 
         //create
         Instantiate(bullet, bulletSpawn, transform.rotation);
+
+        //play sound
+        audioSource.PlayOneShot(shootAudio, 0.5f);
     }
 
     //return time since dash as a %
@@ -156,6 +162,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Part"))
         {
+            audioSource.PlayOneShot(pickupAudio, 0.5f);
             Destroy(collider.gameObject);
             partsCollected++;
         }

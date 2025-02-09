@@ -157,33 +157,51 @@ public class GameManagerScript : MonoBehaviour
         SceneManager.LoadScene("MainMenuScene");
     }
 
-    //spawn enemies
-    private IEnumerator SpawnEnemy()
+    public void PlayAgain()
     {
-        while (spawningEnemies) // Keep spawning enemies until the game ends
-        {
-            yield return new WaitForSeconds(spawnInterval);
-
-            float randomX = Random.Range(minX, maxX);
-            float randomY = Random.Range(minY, maxY);
-            Vector2 enemySpawn = new Vector2(randomX, randomY);
-            
-            //randomly select which enemy to spawn
-            GameObject enemyPrefab;
-            float randomValue = Random.value;
-
-            if (randomValue < 0.4f) // 40% chance
-            {
-                enemyPrefab = shipAttackerPrefab;
-            }
-            else // 60% chance
-            {
-                enemyPrefab = playerAttackerPrefab;
-            }
-
-            Instantiate(enemyPrefab, enemySpawn, Quaternion.identity);
-        }
+        SceneManager.LoadScene("MainLevelScene");
     }
+
+//spawn enemies
+private IEnumerator SpawnEnemy()
+{
+    while (spawningEnemies) //spawning enemies until the game ends
+    {
+        yield return new WaitForSeconds(spawnInterval);
+
+        Vector2 enemySpawn;
+
+        while (true) //keep trying until a valid spawn position is found
+        {
+            float randomX = Random.Range(minX + 1f, maxX - 1f); // Stay inside boundary
+            float randomY = Random.Range(minY + 1f, maxY - 1f);
+            enemySpawn = new Vector2(randomX, randomY);
+
+            //check if the spawn position overlaps a collider (e.g., obstacles, walls)
+            Collider2D hitCollider = Physics2D.OverlapBox(enemySpawn, new Vector2(1, 1), 0);
+
+            if (hitCollider == null) //not inside another collider
+            {
+                break; //spawn position found
+            }
+        }
+
+        // select which enemy to spawn
+        GameObject enemyPrefab;
+        float randomValue = Random.value;
+
+        if (randomValue < 0.4f) // 40% chance
+        {
+            enemyPrefab = shipAttackerPrefab;
+        }
+        else // 60% chance
+        {
+            enemyPrefab = playerAttackerPrefab;
+        }
+
+        Instantiate(enemyPrefab, enemySpawn, Quaternion.identity);
+    }
+}
 
     public void Win()
     {

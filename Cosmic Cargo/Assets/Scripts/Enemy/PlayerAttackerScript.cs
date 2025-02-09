@@ -14,6 +14,9 @@ public class PlayerAttackerScript : MonoBehaviour
     private float attackRange = 15f; // Distance to ship before firing
     private float fireRate = 2.5f; // Wait time between shots
     private float nextFireTime = 0f; // When to fire next
+
+    public AudioSource audioSource;
+    public AudioClip shootAudio;
     
     private GameObject gameManager;
     private GameManagerScript gameManagerScript;
@@ -73,6 +76,7 @@ public class PlayerAttackerScript : MonoBehaviour
         firePoint.rotation = Quaternion.Euler(0, 0, angle - 90f); // Same correction as above
 
         // Spawn bullet
+        audioSource.PlayOneShot(shootAudio, 0.5f);
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 }
