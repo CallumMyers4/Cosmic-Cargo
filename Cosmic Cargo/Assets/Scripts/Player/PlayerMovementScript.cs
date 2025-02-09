@@ -13,11 +13,14 @@ public class PlayerMovementScript : MonoBehaviour
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
+
+    // Fire rate control
+    [SerializeField] private float fireRate = 0.02f; // Time between shots
+    private float nextFireTime = 0f; // Time when player can fire next
     
     //check if currently dashing, how long dash should last, how long is left before timer runs out, when dash was last used and
     //how quick to move whilst dashing and how long between allowing dash
     private bool isDashing; private float dashTime = 5.0f, dashTimeLeft = 0.0f, lastDashTime = 0.0f, dashSpeed = 20.0f, dashCooldown = 10.0f;
-
 
     void Start()
     {
@@ -52,10 +55,11 @@ public class PlayerMovementScript : MonoBehaviour
             StartDash();
         }
 
-        //fire bullets if LMB pressed
-        if (Input.GetMouseButtonDown(0))
+        //fire bullets if past cooldown
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             Fire();
+            nextFireTime = Time.time + fireRate; // Set next allowed fire time
         }
     }
 
@@ -136,7 +140,7 @@ public class PlayerMovementScript : MonoBehaviour
     }
 
     //add when finding parts
-    void OnCollisionEnter2D(Collision2D collider) 
+    void OnTriggerEnter2D(Collider2D collider) 
     {
         if (collider.gameObject.CompareTag("Part"))
         {

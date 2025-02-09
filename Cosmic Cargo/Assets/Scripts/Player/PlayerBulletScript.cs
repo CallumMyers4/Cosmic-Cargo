@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class PlayerBulletScript : MonoBehaviour
@@ -17,5 +18,18 @@ public class PlayerBulletScript : MonoBehaviour
     {
         //move in direction of fire
         transform.position += transform.up * speed * Time.deltaTime;
+    }
+
+    void OnCollisionEnter2D(Collision2D collider)
+    {
+        if (collider.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collider.gameObject);
+            Destroy(gameObject);
+        }
+        else if (!collider.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

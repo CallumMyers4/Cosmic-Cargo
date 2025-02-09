@@ -144,7 +144,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -171,3 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bace810841dd77b4ebe750f2fd08ce3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePoint: {fileID: 3358410535852696414}
+  bulletPrefab: {fileID: 1048490078580544380, guid: b320f0529f7a3654ca1ddb10a79bf241, type: 3}
+  attackRange: 15
