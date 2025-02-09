@@ -37,15 +37,29 @@ public class GameManagerScript : MonoBehaviour
         minY = bottomBorder.transform.position.y + 10;
         maxY = topBorder.transform.position.y - 10;
 
-        //spawn collectables
+        //spawn parts
         for (int i = 0; i < partsPerRound; i++)
         {
-            float randomX = Random.Range(minX, maxX);
-            float randomY = Random.Range(minY, maxY);
-            Vector2 collectableSpawn = new Vector2(randomX, randomY);
+            Vector2 collectableSpawn;
+
+            while (true)
+            {
+                float randomX = Random.Range(minX + 1f, maxX - 1f);
+                float randomY = Random.Range(minY + 1f, maxY - 1f);
+                collectableSpawn = new Vector2(randomX, randomY);
+
+                // Check if the position is inside a collider (e.g., obstacles, walls)
+                Collider2D hitCollider = Physics2D.OverlapBox(collectableSpawn, new Vector2(1, 1), 0);
+
+                if (hitCollider == null) // Ensure it's not inside another collider
+                {
+                    break; // Valid spawn position found
+                }
+            }
 
             Instantiate(partsPrefab, collectableSpawn, Quaternion.identity);
         }
+
 
         //start spawning enemies
         StartCoroutine(SpawnEnemy());
