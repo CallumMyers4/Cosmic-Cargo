@@ -16,9 +16,10 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField]
     private PlayerMovementScript player;  //player ref
     [SerializeField]
-    public UnityEngine.UI.Image healthBar, enemyBar, dashBar; //ref to healthbar, bar displaying enemies in danger zone, and dash cooldown bar
+    public UnityEngine.UI.Image healthBar, enemyBar, dashBar, partsBar; //ref to healthbar, bar displaying enemies in danger zone, dash cooldown bar and parts found
     [SerializeField]
     private GameObject HUDPanel, pausePanel; //ref to main HUD and pause menu
+
     // Start is called before the first frame update
     void Start()
     {       
@@ -45,6 +46,11 @@ public class GameManagerScript : MonoBehaviour
         if (player != null && dashBar != null)
         {
             dashBar.fillAmount = player.GetDashCooldown();
+        }
+
+        if (player != null && partsBar != null)
+        {
+            partsBar.fillAmount = player.GetPartsCollected();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

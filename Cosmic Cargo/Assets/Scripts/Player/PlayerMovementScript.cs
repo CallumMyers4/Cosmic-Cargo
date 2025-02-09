@@ -9,6 +9,7 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody2D rb;  //rigidbody ref
     public Camera playerCam, stationCam;  //reference to player's cam and station's cam
     public GameObject exhaust, bullet;  //sprite for dashing, bullet prefab
+    public int partsCollected = 0;
 
     private Vector2 movement;   //store inputs
     private Vector2 mousePos;   //mouse pos in world space
@@ -122,10 +123,25 @@ public class PlayerMovementScript : MonoBehaviour
 
     //return time since dash as a %
     public float GetDashCooldown()
-{
-    float timeSinceLastDash = Time.time - lastDashTime;
-    return Mathf.Clamp01(timeSinceLastDash / dashCooldown); // Normalized value (0 to 1)
-}
+    {
+        float timeSinceLastDash = Time.time - lastDashTime;
+        return Mathf.Clamp01(timeSinceLastDash / dashCooldown); // Normalized value (0 to 1)
+    }
 
+    //return parts collected (current stage)
+    public float GetPartsCollected()
+    {
+        int maxParts = 10; //parts per stage
+        return (float)partsCollected / maxParts; //return as %
+    }
 
+    //add when finding parts
+    void OnCollisionEnter2D(Collision2D collider) 
+    {
+        if (collider.gameObject.CompareTag("Part"))
+        {
+            Destroy(collider.gameObject);
+            partsCollected++;
+        }
+    }
 }
